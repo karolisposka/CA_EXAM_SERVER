@@ -1,20 +1,25 @@
-const express = require("express");
-const cors = require("cors");
-const { port } = require("./config");
+const express = require('express');
+const cors = require('cors');
+const { port } = require('./config');
 const app = express();
-const userRoutes = require("./Routes/v1/user");
 app.use(cors());
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  return res.send({ msg: "server is running" });
+const userRoutes = require('./Routes/v1/user');
+const medsRoute = require('./Routes/v1/meds');
+const reviewsRoute = require('./Routes/v1/reviews');
+
+app.get('/', (req, res) => {
+  return res.send({ msg: 'server is running' });
 });
 
-app.get("*", (req, res) => {
-  res.send({ msg: "everything ok" });
-});
+app.use('/v1/meds/', medsRoute);
+app.use('/v1/user/', userRoutes);
+app.use('/v1/reviews', reviewsRoute);
 
-app.use("/v1/user/", userRoutes);
+app.get('*', (req, res) => {
+  res.send({ msg: 'everything is ok' });
+});
 
 app.listen(port, () => {
   console.log(`server is running on ${port}`);
