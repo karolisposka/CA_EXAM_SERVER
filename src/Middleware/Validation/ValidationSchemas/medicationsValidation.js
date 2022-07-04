@@ -9,7 +9,7 @@ const addMedicationSchema = joi.object({
 });
 
 const searchMedicationSchema = joi.object({
-  input: joi.string().lowercase().trim().required(),
+  input: joi.string().lowercase().trim(),
 });
 
 module.exports = { addMedicationSchema, searchMedicationSchema };

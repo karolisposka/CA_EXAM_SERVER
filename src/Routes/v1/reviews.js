@@ -23,7 +23,7 @@ router.get('/ratings', async (req, res) => {
   }
 });
 
-router.post('/rate', checkIfLoggedIn, async (req, res) => {
+router.post('/rate', checkIfLoggedIn, validation(reviewsValidationSchema), async (req, res) => {
   try {
     const con = await mysql.createConnection(mysqlConfig);
     const [data] = await con.execute(`INSERT INTO ratings (user_id, comment, rating)

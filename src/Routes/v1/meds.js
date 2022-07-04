@@ -20,7 +20,7 @@ router.get('/get', checkIfLoggedIn, async (req, res) => {
     if (data.length === 0) {
       return res.send({ err: 'No data' });
     }
-    return res.send({ data });
+    return res.send(data);
   } catch (err) {
     console.log(err);
     return res.status(500).send({ err: 'something wrong with the server. Please try again later' });
@@ -40,7 +40,7 @@ router.post('/add', validation(addMedicationSchema), checkIfLoggedIn, async (req
     if (!data.insertId) {
       return res.status(500).send({ err: 'something wrong with the server. Please try again later' });
     }
-    return res.send({ data, msg: 'Record successfully added' });
+    return res.send({ data, msg: 'data successfully added' });
   } catch (err) {
     console.log(err);
     return res.status(500).send({
@@ -70,11 +70,13 @@ router.post('/search', checkIfLoggedIn, validation(searchMedicationSchema), asyn
   try {
     const con = await mysql.createConnection(mysqlConfig);
     const [data] = await con.execute(
-      `SELECT * FROM users_medications WHERE title like ${mysql.escape(req.body.input)}`,
+      `SELECT * FROM users_medications WHERE user_id=${req.user} AND title LIKE ${mysql.escape(
+        '%' + req.body.input + '%',
+      )}`,
     );
     await con.end();
     if (data.length === 0) {
-      return res.send({ msg: 'No data found' });
+      return res.send({ err: 'No data found' });
     }
     return res.send(data);
   } catch (err) {
