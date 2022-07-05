@@ -48,13 +48,4 @@ router.post('/register', validation(registerSchema), async (req, res) => {
   }
 });
 
-router.post('/change-password', async (req, res) => {
-  try {
-    const con = await mysql.createConnection(mysqlConfig);
-  } catch (err) {
-    console.log(err);
-    return res.status(500).send({ err: 'something wrong with the server. Please try again later' });
-  }
-});
-
 module.exports = router;
