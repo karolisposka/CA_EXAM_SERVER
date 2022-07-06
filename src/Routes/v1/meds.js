@@ -1,10 +1,7 @@
 const express = require('express');
 const mysql = require('mysql2/promise');
 const validation = require('../../Middleware/Validation/Validation');
-const {
-  addMedicationSchema,
-  searchMedicationSchema,
-} = require('../../Middleware/Validation/ValidationSchemas/medicationsValidation');
+const { addMedicationSchema } = require('../../Middleware/Validation/ValidationSchemas/medicationsValidation');
 const { mysqlConfig } = require('../../config');
 const router = express.Router();
 const checkIfLoggedIn = require('../../Middleware/Auth/Authentification');
@@ -66,7 +63,7 @@ router.delete('/delete/:id', checkIfLoggedIn, async (req, res) => {
   }
 });
 
-router.post('/search', checkIfLoggedIn, validation(searchMedicationSchema), async (req, res) => {
+router.post('/search', checkIfLoggedIn, async (req, res) => {
   try {
     const con = await mysql.createConnection(mysqlConfig);
     const [data] = await con.execute(
@@ -80,7 +77,6 @@ router.post('/search', checkIfLoggedIn, validation(searchMedicationSchema), asyn
     }
     return res.send(data);
   } catch (err) {
-    console.log(err);
     res.status(500).send({ err: 'Something wrong with the server.Please try again later' });
   }
 });

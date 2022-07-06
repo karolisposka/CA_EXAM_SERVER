@@ -43,7 +43,9 @@ router.post('/register', validation(registerSchema), async (req, res) => {
     }
     return res.send({ err: 'registration successfully completed' });
   } catch (err) {
-    console.log(err);
+    if (err.errno === 1062) {
+      return res.status(400).send({ err: 'user already exists' });
+    }
     return res.status(500).send({ err: 'something wrong with the server. Please try again later' });
   }
 });
